@@ -19,8 +19,8 @@ function buddyforms_structured_data_formbuilder_fields_options( $form_fields, $f
 function buddyforms_structured_data_admin_settings_sidebar_metabox() {
 	add_meta_box( 'buddyforms_structured_data', __( "Structured Data", 'buddyforms' ), 'buddyforms_structured_data_admin_settings_sidebar_metabox_html', 'buddyforms', 'normal', 'low' );
 	add_filter( 'postbox_classes_buddyforms_buddyforms_structured_data', 'buddyforms_metabox_class' );
-	add_filter( 'postbox_classes_buddyforms_buddyforms_structured_data', 'buddyforms_metabox_hide_if_form_type_register' );
-	add_filter( 'postbox_classes_buddyforms_buddyforms_structured_data', 'buddyforms_metabox_hide_if_form_type_register' );
+	//add_filter( 'postbox_classes_buddyforms_buddyforms_structured_data', 'buddyforms_metabox_hide_if_form_type_register' );
+	//add_filter( 'postbox_classes_buddyforms_buddyforms_structured_data', 'buddyforms_metabox_hide_if_form_type_register' );
 }
 
 
