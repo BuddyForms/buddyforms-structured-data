@@ -40,10 +40,10 @@ function buddyforms_generate_structured_data() {
 				switch ( $form_field['type'] ) {
 					case 'xprofile_field':
 
-							$value = xprofile_get_field_data( $form_field['name'], bp_displayed_user_id() );
+						$value = xprofile_get_field_data( $form_field['name'], bp_displayed_user_id() );
 
 						$value_array = $value;
-						if(is_array($value_array)){
+						if ( is_array( $value_array ) ) {
 							$value = '';
 							foreach ( $value_array as $val ) {
 								$value .= $val;

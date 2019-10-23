@@ -42,35 +42,35 @@ function buddyforms_structured_data_admin_settings_sidebar_metabox_html() {
 
 
 	ob_start();
-?>{
-  "@context": "https://schema.org",
-  "@type": "NewsArticle",
-  "mainEntityOfPage": {
+	?>{
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "mainEntityOfPage": {
     "@type": "WebPage",
     "@id": "https://google.com/article"
-  },
-  "headline": "Article headline",
-  "image": [
+    },
+    "headline": "Article headline",
+    "image": [
     "https://example.com/photos/1x1/photo.jpg",
     "https://example.com/photos/4x3/photo.jpg",
     "https://example.com/photos/16x9/photo.jpg"
-   ],
-  "datePublished": "2015-02-05T08:00:00+08:00",
-  "dateModified": "2015-02-05T09:20:00+08:00",
-  "author": {
+    ],
+    "datePublished": "2015-02-05T08:00:00+08:00",
+    "dateModified": "2015-02-05T09:20:00+08:00",
+    "author": {
     "@type": "Person",
     "name": "John Doe"
-  },
-   "publisher": {
+    },
+    "publisher": {
     "@type": "Organization",
     "name": "Google",
     "logo": {
-      "@type": "ImageObject",
-      "url": "https://google.com/logo.jpg"
+    "@type": "ImageObject",
+    "url": "https://google.com/logo.jpg"
     }
-  },
-  "description": "A most wonderful article"
-}<?php
+    },
+    "description": "A most wonderful article"
+    }<?php
 
 	$structured_data_json = ob_get_clean();
 	if ( isset( $buddyform['structured_data_json'] ) ) {
@@ -86,7 +86,8 @@ function buddyforms_structured_data_admin_settings_sidebar_metabox_html() {
 	$form_setup[] = new Element_Textarea( "<br><b>" . __( 'json', 'buddyforms' ) . "</b>", "buddyforms_options[structured_data_json]", array(
 		'value'     => $structured_data_json,
 		'shortDesc' => __( 'This is the default Blog Post Markup from <a target="_blank" href="https://search.google.com/structured-data/testing-tool?utm_campaign=devsite&utm_medium=jsonld&utm_source=article"> here</a>. Adjust it to your needs. You can use any form element value by using the form element slug as shortcode [slug]', 'buddyforms' ),
-		'cols' => '70', 'rows' => '25'
+		'cols'      => '70',
+		'rows'      => '25'
 	) );
 
 	buddyforms_display_field_group_table( $form_setup );
