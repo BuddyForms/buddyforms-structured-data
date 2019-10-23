@@ -25,14 +25,26 @@ function buddyforms_generate_structured_data() {
 			if ( $buddyforms[ $form_slug ]['form_type'] == 'post' ) {
 				if ( $form_field['type'] == 'featured_image' ) {
 
-					//get_the_post_thumbnail_url( $post->ID, 'full' );
-					$json = buddyforms_replace_shortcode_for_value( $json, '[featured_image_small]', 'etwas' );
-					$json = buddyforms_replace_shortcode_for_value( $json, '[featured_image_medium]', get_the_title( $post->ID ) );
-					$json = buddyforms_replace_shortcode_for_value( $json, '[featured_image_full]', get_the_title( $post->ID ) );
+//					$json = buddyforms_replace_shortcode_for_value( $json, '[featured_image]', get_the_post_thumbnail_url( $post->ID, 'full' ) );
+//					$json = buddyforms_replace_shortcode_for_value( $json, '[featured_image_medium]', get_the_title( $post->ID ) );
+//					$json = buddyforms_replace_shortcode_for_value( $json, '[featured_image_full]', get_the_title( $post->ID ) );
 				}
 
+
+				$permalink      = get_permalink( $post->ID );
+				$author_name    = get_the_author_meta( 'display_name', $post->post_author );
+				$date_published = get_the_time( DATE_ISO8601, $post->ID );
+				$date_modified  = get_post_modified_time( DATE_ISO8601, __return_false(), $post->ID );
+
+
+				$json = buddyforms_replace_shortcode_for_value( $json, '[permalink]', $permalink );
+				$json = buddyforms_replace_shortcode_for_value( $json, '[author_name]', $author_name );
+				$json = buddyforms_replace_shortcode_for_value( $json, '[date_published]', $date_published );
+				$json = buddyforms_replace_shortcode_for_value( $json, '[date_modified]', $date_modified );
+
+
 				$value = buddyforms_get_field_with_meta( $form_slug, $post->ID, $form_field['slug'] );
-				$json  = buddyforms_replace_shortcode_for_value( $json, '[' . $form_field['slug'] . ']', $value['value'] );
+				$json  = buddyforms_replace_shortcode_for_value( $json, '[' . $form_field['slug'] . ']', strip_tags( $value['value'] ) );
 			}
 
 			if ( $buddyforms[ $form_slug ]['form_type'] == 'registration' ) {
@@ -50,7 +62,7 @@ function buddyforms_generate_structured_data() {
 							}
 						}
 
-						$json = buddyforms_replace_shortcode_for_value( $json, '[' . $form_field['name'] . ']', $value );
+						$json = buddyforms_replace_shortcode_for_value( $json, '[' . $form_field['name'] . ']', strip_tags( $value ) );
 
 						break;
 					case 'xprofile_group':
@@ -59,7 +71,8 @@ function buddyforms_generate_structured_data() {
 						break;
 				}
 
-				$json = buddyforms_replace_shortcode_for_value( $json, '[featured_image_small]', $value );
+				$value = buddyforms_get_field_with_meta( $form_slug, $post->ID, $form_field['slug'] );
+				$json  = buddyforms_replace_shortcode_for_value( $json, '[' . $form_field['slug'] . ']', strip_tags( $value['value'] ) );
 
 			}
 
