@@ -49,6 +49,10 @@ function buddyforms_generate_structured_data() {
 
 			if ( $buddyforms[ $form_slug ]['form_type'] == 'registration' ) {
 
+				$profile_link = bp_core_get_userlink( bp_displayed_user_id() );
+				$json         = buddyforms_replace_shortcode_for_value( $json, '[profile_link]', strip_tags( $profile_link ) );
+
+
 				switch ( $form_field['type'] ) {
 					case 'xprofile_field':
 
