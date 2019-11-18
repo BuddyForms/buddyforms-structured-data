@@ -62,7 +62,7 @@ function buddyforms_generate_structured_data() {
 						if ( is_array( $value_array ) ) {
 							$value = '';
 							foreach ( $value_array as $val ) {
-								$value .= $val;
+								$value .= ' ' . $val;
 							}
 						}
 
