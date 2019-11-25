@@ -42,6 +42,23 @@ function buddyforms_generate_structured_data() {
 				$json = buddyforms_replace_shortcode_for_value( $json, '[date_published]', $date_published );
 				$json = buddyforms_replace_shortcode_for_value( $json, '[date_modified]', $date_modified );
 
+				//$parent_id = wp_get_post_parent_id($post->ID);
+
+
+				$tispost = get_post($post->ID);
+				$parent_id = $tispost->post_parent;
+
+				$parent_post = get_post($parent_id);
+				$parent_post_title = $parent_post->post_title;
+				$json = buddyforms_replace_shortcode_for_value( $json, '[projekte]', $parent_post_title );
+
+
+				// DISPLAY Adresse
+				$adresse = bf_geo_my_wp_get_content_address_by_component( $post->ID, 'location' );
+
+				if ( isset( $adresse[0] ) ) :
+					$json = buddyforms_replace_shortcode_for_value( $json, '[location]', strip_tags( $adresse[0] ) );
+				endif;
 
 				$value = buddyforms_get_field_with_meta( $form_slug, $post->ID, $form_field['slug'] );
 				$json  = buddyforms_replace_shortcode_for_value( $json, '[' . $form_field['slug'] . ']', strip_tags( $value['value'] ) );
@@ -54,6 +71,18 @@ function buddyforms_generate_structured_data() {
 
 
 				switch ( $form_field['type'] ) {
+					case 'profile_picture':
+
+
+						$url = bp_core_fetch_avatar (
+							array(  'item_id' => bp_displayed_user_id(), // id of user for desired avatar
+							        'type'    => 'full',
+							        'html'   => FALSE     // FALSE = return url, TRUE (default) = return img html
+							)
+						);
+
+						$json = buddyforms_replace_shortcode_for_value( $json, '[profile_picture]', strip_tags( $url ) );
+						break;
 					case 'xprofile_field':
 
 						$value = xprofile_get_field_data( $form_field['name'], bp_displayed_user_id() );
@@ -70,6 +99,20 @@ function buddyforms_generate_structured_data() {
 
 						break;
 					case 'xprofile_group':
+						break;
+
+					case 'geo_my_wp_address':
+
+						$addresse = get_post_meta( $post->ID, 'location' );
+
+
+						// DISPLAY Adresse
+						$adresse = bf_geo_my_wp_get_content_address_by_component( $post->ID, 'location' );
+
+						if ( isset( $adresse[0] ) ) :
+							$json = buddyforms_replace_shortcode_for_value( $json, '[location]', strip_tags( $adresse[0] ) );
+						endif;
+
 						break;
 					default:
 						break;
