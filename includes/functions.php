@@ -16,7 +16,8 @@ function buddyforms_generate_structured_data() {
 		return;
 	}
 
-	$json = $buddyforms[ $form_slug ]['structured_data_json'];
+	$form_type = $buddyforms[ $form_slug ]['form_type'];
+	$json      = $buddyforms[ $form_slug ]['structured_data_json'];
 
 	if ( isset( $buddyforms[ $form_slug ]['form_fields'] ) ) {
 		foreach ( $buddyforms[ $form_slug ]['form_fields'] as $key => $form_field ) {
@@ -45,12 +46,12 @@ function buddyforms_generate_structured_data() {
 				//$parent_id = wp_get_post_parent_id($post->ID);
 
 
-				$tispost = get_post($post->ID);
+				$tispost   = get_post( $post->ID );
 				$parent_id = $tispost->post_parent;
 
-				$parent_post = get_post($parent_id);
+				$parent_post       = get_post( $parent_id );
 				$parent_post_title = $parent_post->post_title;
-				$json = buddyforms_replace_shortcode_for_value( $json, '[projekte]', $parent_post_title );
+				$json              = buddyforms_replace_shortcode_for_value( $json, '[projekte]', $parent_post_title );
 
 
 				// DISPLAY Adresse
@@ -74,10 +75,11 @@ function buddyforms_generate_structured_data() {
 					case 'profile_picture':
 
 
-						$url = bp_core_fetch_avatar (
-							array(  'item_id' => bp_displayed_user_id(), // id of user for desired avatar
-							        'type'    => 'full',
-							        'html'   => FALSE     // FALSE = return url, TRUE (default) = return img html
+						$url = bp_core_fetch_avatar(
+							array(
+								'item_id' => bp_displayed_user_id(), // id of user for desired avatar
+								'type'    => 'full',
+								'html'    => false     // FALSE = return url, TRUE (default) = return img html
 							)
 						);
 
@@ -91,7 +93,7 @@ function buddyforms_generate_structured_data() {
 						if ( is_array( $value_array ) ) {
 							$value = '';
 							foreach ( $value_array as $val ) {
-								$value .= ' ' . $val;
+								$value .= $val;
 							}
 						}
 
@@ -102,19 +104,14 @@ function buddyforms_generate_structured_data() {
 						break;
 
 					case 'geo_my_wp_address':
-
-						$addresse = get_post_meta( $post->ID, 'location' );
-
-
-						// DISPLAY Adresse
-						$adresse = bf_geo_my_wp_get_content_address_by_component( $post->ID, 'location' );
-
-						if ( isset( $adresse[0] ) ) :
-							$json = buddyforms_replace_shortcode_for_value( $json, '[location]', strip_tags( $adresse[0] ) );
-						endif;
-
-						break;
-					default:
+						if ( $form_type !== 'registration' ) {
+							$location_data = bf_geo_my_wp_get_content_address_by_component( $post->ID, $form_field['slug'] );
+						} else {
+							$location_data = bf_geo_my_wp_get_user_address_by_component( bp_displayed_user_id(), $form_field['slug'] );
+						}
+						if ( isset( $location_data[0] ) ) {
+							$json = buddyforms_replace_shortcode_for_value( $json, '[location]', strip_tags( $location_data[0] ) );
+						}
 						break;
 				}
 
